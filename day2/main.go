@@ -13,12 +13,17 @@ type round struct {
 
 const (
 	filePath = "input.txt"
+)
+const (
 	ROCK     = 0
 	PAPER    = 1
 	SCISSORS = 2
-	LOSE     = 0
-	DRAW     = 1
-	WIN      = 2
+)
+
+const (
+	LOSE = 0
+	DRAW = 1
+	WIN  = 2
 )
 
 func main() {
