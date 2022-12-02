@@ -34,7 +34,6 @@ func main() {
 	for scanner.Scan() {
 		line := scanner.Text()
 		rounds = append(rounds, parseLine(line))
-		//score += scoreRound(currentPlay)
 	}
 
 	score := 0
