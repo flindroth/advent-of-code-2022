@@ -60,14 +60,6 @@ func main() {
 
 }
 
-func sum(ints []int) int {
-	s := 0
-	for _, v := range ints {
-		s += v
-	}
-	return s
-}
-
 func parseLine(line string) round {
 	firstChar := line[0]
 	secondChar := line[2]
