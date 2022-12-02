@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bufio"
 	"log"
-	"os"
+
+	"github.com/flindroth/advent-of-code-2022/util"
 )
 
 type round struct {
@@ -27,18 +27,15 @@ const (
 )
 
 func main() {
-	file, err := os.Open(filePath)
+	lines, err := util.GetPuzzleInput(2)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Cannot get puzzle input: %v", err.Error())
 	}
-
-	scanner := bufio.NewScanner(file)
 
 	rounds := make([]round, 0)
 
-	for scanner.Scan() {
-		line := scanner.Text()
-		rounds = append(rounds, parseLine(line))
+	for _, v := range lines {
+		rounds = append(rounds, parseLine(v))
 	}
 
 	score := 0
