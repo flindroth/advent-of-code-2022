@@ -13,6 +13,7 @@ const (
 	baseUrl    = "https://adventofcode.com"
 	year       = 2022
 	cookieFile = "session.txt"
+	userAgent  = "github.com/flindroth/advent-of-code-2022 fredriklindroth@gmail.com"
 )
 
 func GetPuzzleInput(day int) ([]string, error) {
@@ -27,6 +28,7 @@ func GetPuzzleInput(day int) ([]string, error) {
 	}
 
 	req.AddCookie(&http.Cookie{Name: "session", Value: sessionCookie})
+	req.Header.Add("User-Agent", userAgent)
 
 	resp, err := http.DefaultClient.Do(req)
 
