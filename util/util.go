@@ -4,9 +4,11 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/fs"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 )
 
 const (
@@ -17,6 +19,32 @@ const (
 )
 
 func GetPuzzleInput(day int) ([]string, error) {
+	lines, err := getPuzzleInputFromCache(day)
+	if err != nil {
+		log.Printf("Cache miss, fetching puzzle input by HTTP")
+		return getPuzzleInputFromHTTP(day)
+	}
+	return lines, nil
+}
+
+func getPuzzleInputFromCache(day int) ([]string, error) {
+
+	file, err := os.Open(fmt.Sprintf(".cache/days/%v", day))
+	if err != nil {
+		return nil, err
+	}
+
+	lines := make([]string, 0)
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	return lines, nil
+}
+
+func getPuzzleInputFromHTTP(day int) ([]string, error) {
 	sessionCookie, err := getSessionCookie()
 	if err != nil {
 		return nil, fmt.Errorf("cannot read session cookie: %v", err.Error())
@@ -51,6 +79,9 @@ func GetPuzzleInput(day int) ([]string, error) {
 		lines = append(lines, scanner.Text())
 	}
 
+	if err := saveLinesToCache(day, lines); err != nil {
+		log.Printf("WARNING: Unable to save puzzle input to cache: %v", err.Error())
+	}
 	return lines, nil
 }
 
@@ -68,4 +99,25 @@ func getSessionCookie() (string, error) {
 		return "", err
 	}
 	return string(bytes), nil
+}
+
+func saveLinesToCache(day int, lines []string) error {
+	if err := os.MkdirAll(".cache/days", fs.ModePerm); err != nil {
+		return err
+	}
+
+	file, err := os.Create(fmt.Sprintf(".cache/days/%v", day))
+	if err != nil {
+		return err
+	}
+
+	if file != nil {
+		defer file.Close()
+	}
+
+	for _, line := range lines {
+		file.WriteString(line + "\n")
+	}
+
+	return nil
 }
