@@ -21,11 +21,11 @@ var (
 )
 
 func main() {
-	l, err := util.GetPuzzleInput(7)
-	if err != nil {
+	if l, err := util.GetPuzzleInput(7); err == nil {
+		lines = l
+	} else {
 		log.Fatalf("Could not read puzzle input: %v", err.Error())
 	}
-	lines = l
 
 	curLine = 2
 	processDir("/")
@@ -48,7 +48,6 @@ func main() {
 	sizes := []int{}
 	for _, v := range dirs {
 		sizes = append(sizes, v)
-		sum += v
 	}
 
 	sort.Ints(sizes)
