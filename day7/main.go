@@ -27,7 +27,6 @@ func main() {
 		log.Fatalf("Could not read puzzle input: %v", err.Error())
 	}
 
-	curLine = 2
 	processDir("/")
 
 	// Star 1
